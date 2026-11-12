@@ -17,7 +17,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install google-api-python-client google-auth-oauthlib google-auth-httplib2 requests
+          python -m pip install --upgrade pip
+          pip install google-api-python-client google-auth-oauthlib google-auth-httplib2 requests google-generativeai
 
       - name: Run script
         env:
