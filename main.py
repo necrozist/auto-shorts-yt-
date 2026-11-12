@@ -20,7 +20,8 @@ def main():
     
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-3.0-flash")
+        # Using the correct stable model for this SDK version
+        model = genai.GenerativeModel("gemini-1.5-flash")
         print("-> Generating content using Gemini...")
         response = model.generate_content("Give me a catchy 30-second YouTube Short title and script about a space fact.")
         
