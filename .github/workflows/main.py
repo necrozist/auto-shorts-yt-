@@ -1,13 +1,35 @@
 import os
+import google.generativeai as genai
 
 def main():
-    print("Checking GitHub Secrets...")
-    print("Gemini Key Exists:", bool(os.environ.get("GEMINI_API_KEY")))
-    print("Client ID Exists:", bool(os.environ.get("YOUTUBE_CLIENT_ID")))
-    print("Client Secret Exists:", bool(os.environ.get("YOUTUBE_CLIENT_SECRET")))
-    print("Refresh Token Exists:", bool(os.environ.get("YOUTUBE_REFRESH_TOKEN")))
-    print("All secrets loaded successfully!")
+    print("Initializing Auto Shorts Script...")
+    
+    # Configure Gemini API
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is missing!")
+    
+    genai.configure(api_key=api_key)
+    
+    # Using Gemini to generate a YouTube Short topic and script
+    print("Generating YouTube Short topic & script using Gemini...")
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content("Give me a catchy 30-second YouTube Short script about an interesting space fact, including a Title and Description.")
+    
+    print("\n--- Generated Short Content ---")
+    print(response.text)
+    print("------------------------------\n")
+    
+    # Checking YouTube Credentials
+    client_id = os.environ.get("YOUTUBE_CLIENT_ID")
+    client_secret = os.environ.get("YOUTUBE_CLIENT_SECRET")
+    refresh_token = os.environ.get("YOUTUBE_REFRESH_TOKEN")
+    
+    if client_id and client_secret and refresh_token:
+        print("YouTube credentials are fully loaded and ready for upload integration!")
+    else:
+        print("Warning: Some YouTube credentials are missing.")
 
 if __name__ == "__main__":
     main()
-  
+    
