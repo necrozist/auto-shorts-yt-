@@ -20,8 +20,22 @@ def main():
     
     try:
         genai.configure(api_key=api_key)
-        # Using the correct stable model for this SDK version
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        
+        # Automatically find the first available working model for this API key
+        available_models = [
+            m.name for m in genai.list_models()
+            if 'generateContent' in m.supported_generation_methods
+        ]
+        
+        if not available_models:
+            print("ERROR: No models available for generateContent with this API key!")
+            sys.exit(1)
+            
+        # Prefer a flash model if available, otherwise pick the first working one
+        selected_model = next((m for m in available_models if 'flash' in m), available_models[0])
+        print(f"-> Auto-selected working model: {selected_model}")
+        
+        model = genai.GenerativeModel(selected_model)
         print("-> Generating content using Gemini...")
         response = model.generate_content("Give me a catchy 30-second YouTube Short title and script about a space fact.")
         
